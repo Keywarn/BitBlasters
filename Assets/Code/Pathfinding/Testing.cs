@@ -5,10 +5,19 @@ using UnityEngine;
 public class Testing : MonoBehaviour
 {
     private Grid<int> grid;
+    public GameObject prefab;
     // Start is called before the first frame update
     void Start()
     {
-        grid = new Grid<int>(4, 2, 1f, new Vector3(-5f, -5f, 0f));
+        grid = new Grid<int>(10, 3, 1f, new Vector3(-3f, -3f, 0f));
+
+        for (int x = 0; x < 10; ++x)
+        {
+            for (int y = 0; y < 3; ++y) {
+
+                Instantiate(prefab, grid.GetWorldPosition(x,y), Quaternion.identity);
+            }
+        }
     }
 
     // Update is called once per frame
