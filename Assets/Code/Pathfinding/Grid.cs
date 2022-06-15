@@ -10,7 +10,7 @@ public class Grid
 
     private Vector3 originPosition;
 
-    private bool debugOut = true;
+    private bool debugOut = false;
 
     public Grid(int width, int height, float cellSize, Vector3 originPosition)
     {

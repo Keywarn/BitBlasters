@@ -29,7 +29,11 @@ public class Manager : MonoBehaviour
     private bool building;
     public int round = 0;
 
+    // Currency
+    public int data = 50;
+
     public GameObject endPrefab;
+    public GameObject[] tiles;
 
     // Start is called before the first frame update
     void Start()
@@ -43,9 +47,14 @@ public class Manager : MonoBehaviour
         startPosition = pathfinding.GetGrid().GetWorldPosition(startX, startY);
         endPosition = pathfinding.GetGrid().GetWorldPosition(endX, endY);
 
+        SetupTiles();
+
         Instantiate(endPrefab, endPosition, Quaternion.identity);
 
         pathfindingDirty = true;
+
+        building = true;
+        StartRound();
     }
 
     // Update is called once per frame
@@ -76,7 +85,7 @@ public class Manager : MonoBehaviour
             {
                 currentBuildTimer = 0;
                 building = false;
-                StartRound();
+                
             }
         }
         else if (mobsSpawned < mobsInRound)
@@ -85,6 +94,7 @@ public class Manager : MonoBehaviour
         }
         else if(mobsDied == mobsInRound)
         {
+            StartRound();
             building = true;
         }
     }
@@ -107,7 +117,15 @@ public class Manager : MonoBehaviour
     public void mobDied(Enemy mob)
     {
         mobsDied++;
-        // Todo increase currency by amount on the mob
+
+        if(mob.health > 0)
+        {
+            data -= mob.data;
+        }
+        else
+        {
+            data += mob.data;
+        }
     }
 
     void StartRound() {
@@ -116,5 +134,17 @@ public class Manager : MonoBehaviour
         // TODO Decide how many mobs
         mobsInRound = 5;
         mobsSpawned = 0;
+        mobsDied = 0;
+    }
+
+    void SetupTiles()
+    {
+        for (int x = 0; x < gridWidth; x++)
+        {
+            for(int y = 0; y < gridHeight; y++)
+            {
+                Instantiate(tiles[Random.Range(0, tiles.Length - 1)], pathfinding.GetGrid().GetWorldPosition(x, y), Quaternion.identity);
+            }
+        }
     }
 }

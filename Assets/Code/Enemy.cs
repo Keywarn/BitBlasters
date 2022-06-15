@@ -5,6 +5,9 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public float moveSpeed;
+    public int data;
+    public int health;
+
     private int currentNode = 0;
 
     public List<Vector3> path;
