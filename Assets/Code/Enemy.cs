@@ -20,13 +20,17 @@ public class Enemy : MonoBehaviour
     {
         if(path.Count > 0)
         {
-            // TODO do a lookat function
             transform.position += (path[currentNode] - transform.position).normalized * Time.deltaTime * moveSpeed;
 
             if (Vector3.Distance(transform.position, path[currentNode]) < 0.1f)
             {  //Next point in list has been reached
                 currentNode++;
             }
+
+            // Look at
+            Vector3 direction = path[currentNode] - transform.position;
+            float angle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
         }
     }
 }
