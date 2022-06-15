@@ -14,6 +14,11 @@ public class Manager : MonoBehaviour
 
     List<Vector3> path;
     private bool pathfindingDirty;
+
+    public float mobTimer = 3f;
+    public GameObject mob;
+    private float currentMobTimer = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,6 +51,22 @@ public class Manager : MonoBehaviour
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             pathfinding.GetGrid().GetNode(worldPosition).isWalkable = false;
             pathfindingDirty = true;
+        }
+
+        HandleMobSpawning();
+    }
+
+    void HandleMobSpawning()
+    {
+        currentMobTimer += Time.deltaTime;
+
+        if(currentMobTimer >= mobTimer)
+        {
+            GameObject newMob = Instantiate(mob, startPosition, Quaternion.identity);
+
+            newMob.GetComponent<Enemy>().path = path;
+
+            currentMobTimer = 0;
         }
     }
 }
