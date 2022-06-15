@@ -33,4 +33,14 @@ public class Enemy : MonoBehaviour
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
         }
     }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        Debug.Log("COllision");
+        if (col.gameObject.tag == "Finish")
+        {
+            Manager.Instance.mobDied(this);
+            Destroy(gameObject);
+        }
+    }
 }

@@ -175,6 +175,12 @@ MonoBehaviour:
   endY: 4
   mobTimer: 1
   mob: {fileID: 2627933417702508311, guid: 6a28ac1b5e9714e5baa8d73a9185888f, type: 3}
+  mobsInRound: 0
+  mobsSpawned: 0
+  mobsDied: 0
+  buildTimer: 5
+  round: 0
+  endPrefab: {fileID: 1297044329942528415, guid: 1513623d43f7c4b3a87cdbc841fad4ed, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

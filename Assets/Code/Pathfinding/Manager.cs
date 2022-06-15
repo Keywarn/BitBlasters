@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Manager : MonoBehaviour
 {
+    public static Manager Instance { get; private set; }
     // Grid
     public int gridWidth, gridHeight;
     public int startX, startY, endX, endY;
@@ -28,17 +29,21 @@ public class Manager : MonoBehaviour
     private bool building;
     public int round = 0;
 
-    GameObject endPrefab;
+    public GameObject endPrefab;
 
     // Start is called before the first frame update
     void Start()
     {
+        Instance = this;
+
         transform.position = new Vector3(-gridWidth / 2f, -gridHeight / 2f, 0f);
 
         pathfinding = new Pathfinding(gridWidth, gridHeight, transform.position);
 
         startPosition = pathfinding.GetGrid().GetWorldPosition(startX, startY);
         endPosition = pathfinding.GetGrid().GetWorldPosition(endX, endY);
+
+        Instantiate(endPrefab, endPosition, Quaternion.identity);
 
         pathfindingDirty = true;
     }
@@ -97,6 +102,12 @@ public class Manager : MonoBehaviour
             currentMobTimer = 0;
             mobsSpawned++;
         }
+    }
+
+    public void mobDied(Enemy mob)
+    {
+        mobsDied++;
+        // Todo increase currency by amount on the mob
     }
 
     void StartRound() {
