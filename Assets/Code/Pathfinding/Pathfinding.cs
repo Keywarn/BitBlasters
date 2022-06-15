@@ -109,23 +109,29 @@ public class Pathfinding
 
         if (node.x - 1 >= 0)
         {
+            // Left
             neighbours.Add(grid.GetNode(node.x - 1, node.y));
 
-            if (CAN_TRAVEL_DIAGONAL)
+            if (CAN_TRAVEL_DIAGONAL && grid.GetNode(node.x-1, node.y).isWalkable)
             {
-                if (node.y - 1 >= 0) neighbours.Add(grid.GetNode(node.x - 1, node.y - 1));
-                if (node.y + 1 < grid.GetHeight()) neighbours.Add(grid.GetNode(node.x - 1, node.y + 1));
+                // Left Below
+                if (node.y - 1 >= 0 && grid.GetNode(node.x, node.y - 1).isWalkable) neighbours.Add(grid.GetNode(node.x - 1, node.y - 1));
+                // Left Above
+                if (node.y + 1 < grid.GetHeight() && grid.GetNode(node.x, node.y + 1).isWalkable) neighbours.Add(grid.GetNode(node.x - 1, node.y + 1));
             }
         }
 
         if (node.x + 1 < grid.GetWidth())
         {
+            // Right
             neighbours.Add(grid.GetNode(node.x + 1, node.y));
 
-            if (CAN_TRAVEL_DIAGONAL)
+            if (CAN_TRAVEL_DIAGONAL && grid.GetNode(node.x + 1, node.y).isWalkable)
             {
-                if (node.y - 1 >= 0) neighbours.Add(grid.GetNode(node.x + 1, node.y - 1));
-                if (node.y + 1 < grid.GetHeight()) neighbours.Add(grid.GetNode(node.x + 1, node.y + 1));
+                // Right Below
+                if (node.y - 1 >= 0 && grid.GetNode(node.x , node.y - 1).isWalkable) neighbours.Add(grid.GetNode(node.x + 1, node.y - 1));
+                // Right Above
+                if (node.y + 1 < grid.GetHeight() && grid.GetNode(node.x, node.y + 1).isWalkable) neighbours.Add(grid.GetNode(node.x + 1, node.y + 1));
             }
         }
 
