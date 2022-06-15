@@ -31,10 +31,10 @@ public class Testing : MonoBehaviour
             }
         }
 
-        //if (Input.GetMouseButton(1))
-        //{
-        //    Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //    Debug.Log(grid.GetValue(worldPosition));
-        //}
+        if (Input.GetMouseButton(1))
+        {
+            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            pathfinding.GetGrid().GetNode(worldPosition).isWalkable = false;
+        }
     }
 }
