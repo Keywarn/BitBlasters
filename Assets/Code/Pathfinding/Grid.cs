@@ -41,12 +41,12 @@ public class Grid
         {
             for (int y = 0; y < gridArray.GetLength(1); y++)
             {
-                Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), Color.white, 100f);
-                Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), Color.white, 100f);
+                Debug.DrawLine(GetWorldPosition(x, y) - Vector3.one * cellSize * 0.5f, GetWorldPosition(x, y + 1) - Vector3.one * cellSize * 0.5f, Color.white, 100f);
+                Debug.DrawLine(GetWorldPosition(x, y) - Vector3.one * cellSize * 0.5f, GetWorldPosition(x + 1, y) - Vector3.one * cellSize * 0.5f, Color.white, 100f);
             }
         }
-        Debug.DrawLine(GetWorldPosition(0, height), GetWorldPosition(width, height), Color.white, 100f);
-        Debug.DrawLine(GetWorldPosition(width, 0), GetWorldPosition(width, height), Color.white, 100f);
+        Debug.DrawLine(GetWorldPosition(0, height) - Vector3.one * cellSize * 0.5f, GetWorldPosition(width, height) - Vector3.one * cellSize * 0.5f, Color.white, 100f);
+        Debug.DrawLine(GetWorldPosition(width, 0) - Vector3.one * cellSize * 0.5f, GetWorldPosition(width, height) - Vector3.one * cellSize * 0.5f, Color.white, 100f);
     }
 
     public int GetWidth()
@@ -61,7 +61,8 @@ public class Grid
 
     public Vector3 GetWorldPosition(int x, int y)
     {
-        return new Vector3(x, y) * cellSize + originPosition;
+        return new Vector3(x, y) * cellSize + originPosition + (Vector3.one * cellSize * 0.5f);
+
     }
 
     public void GetXY(Vector3 worldPosition, out int x, out int y)

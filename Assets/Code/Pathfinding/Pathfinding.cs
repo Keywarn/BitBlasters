@@ -9,13 +9,38 @@ public class Pathfinding
 
     private const bool CAN_TRAVEL_DIAGONAL = true;
 
+    public static Pathfinding Instance { get; private set; }
+
     private Grid grid;
     private List<PathNode> openList;
     private List<PathNode> closedList;
 
     public Pathfinding(int width, int height, Vector3 position)
     {
+        Instance = this;
         grid = new Grid(width, height, 1f, position);
+    }
+
+    public List<Vector3> FindPath(Vector3 startWorldPosition, Vector3 endWorldPosition)
+    {
+        grid.GetXY(startWorldPosition, out int startX, out int startY);
+        grid.GetXY(endWorldPosition, out int endX, out int endY);
+
+        List<PathNode> path = FindPath(startX, startY, endX, endY);
+        if(path == null)
+        {
+            return null;
+        }
+        else
+        {
+            List<Vector3> vectorPath = new List<Vector3>();
+            foreach (PathNode node in path)
+            {
+                vectorPath.Add(grid.GetWorldPosition(node.x, node.y));
+            }
+
+            return vectorPath;
+        }
     }
 
     public List<PathNode> FindPath(int startX, int startY, int endX, int endY)

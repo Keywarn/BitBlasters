@@ -20,13 +20,13 @@ public class Testing : MonoBehaviour
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             pathfinding.GetGrid().GetXY(worldPosition, out int x, out int y);
 
-            List<PathNode> path = pathfinding.FindPath(0, 0, x, y);
+            List<Vector3> path = pathfinding.FindPath(transform.position, worldPosition);
 
             if (pathfinding != null)
             {
                 for (int i = 0; i < path.Count -1; i++)
                 {
-                    Debug.DrawLine(new Vector3(path[i].x, path[i].y) + transform.position + Vector3.one * 0.5f, new Vector3(path[i+1].x, path[i+1].y) + transform.position + Vector3.one * 0.5f, Color.green, 5f);
+                    Debug.DrawLine(path[i], path[i+1], Color.green, 5f);
                 }
             }
         }
