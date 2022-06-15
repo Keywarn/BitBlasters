@@ -4,20 +4,31 @@ using UnityEngine;
 
 public class Manager : MonoBehaviour
 {
+    // Grid
     public int gridWidth, gridHeight;
-
     public int startX, startY, endX, endY;
 
+    //Pathing
     private Pathfinding pathfinding;
-
     private Vector3 startPosition, endPosition;
-
     List<Vector3> path;
     private bool pathfindingDirty;
 
+    // Mob management
     public float mobTimer = 3f;
     public GameObject mob;
     private float currentMobTimer = 0f;
+    public float mobsInRound;
+    public float mobsSpawned;
+    public float mobsDied;
+
+    // Flow management
+    public float buildTimer = 5f;
+    private float currentBuildTimer = 0f;
+    private bool building;
+    public int round = 0;
+
+    GameObject endPrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -53,7 +64,24 @@ public class Manager : MonoBehaviour
             pathfindingDirty = true;
         }
 
-        HandleMobSpawning();
+        if (building)
+        {
+            currentBuildTimer += Time.deltaTime;
+            if (currentBuildTimer >= buildTimer)
+            {
+                currentBuildTimer = 0;
+                building = false;
+                StartRound();
+            }
+        }
+        else if (mobsSpawned < mobsInRound)
+        {
+            HandleMobSpawning();
+        }
+        else if(mobsDied == mobsInRound)
+        {
+            building = true;
+        }
     }
 
     void HandleMobSpawning()
@@ -67,6 +95,15 @@ public class Manager : MonoBehaviour
             newMob.GetComponent<Enemy>().path = path;
 
             currentMobTimer = 0;
+            mobsSpawned++;
         }
+    }
+
+    void StartRound() {
+        round++;
+
+        // TODO Decide how many mobs
+        mobsInRound = 5;
+        mobsSpawned = 0;
     }
 }
