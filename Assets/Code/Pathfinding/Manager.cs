@@ -33,6 +33,7 @@ public class Manager : MonoBehaviour
     public int data = 50;
 
     public GameObject endPrefab;
+    public GameObject bitBlaster;
     public GameObject[] tiles;
 
     // Start is called before the first frame update
@@ -71,10 +72,13 @@ public class Manager : MonoBehaviour
             Debug.DrawLine(path[i], path[i + 1], Color.green);
         }
 
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButtonDown(0))
         {
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            pathfinding.GetGrid().GetNode(worldPosition).placeable = new Placeable();
+            pathfinding.GetGrid().GetXY(worldPosition, out int x, out int y);
+
+            GameObject tower = GameObject.Instantiate(bitBlaster, pathfinding.GetGrid().GetWorldPosition(x,y), Quaternion.identity);
+            pathfinding.GetGrid().GetNode(worldPosition).placeable = tower.GetComponent<Placeable>();
             pathfindingDirty = true;
         }
 
@@ -92,7 +96,7 @@ public class Manager : MonoBehaviour
         {
             HandleMobSpawning();
         }
-        else if(mobsDied == mobsInRound)
+        else if(mobsDied >= mobsInRound)
         {
             StartRound();
             building = true;
@@ -146,5 +150,10 @@ public class Manager : MonoBehaviour
                 Instantiate(tiles[Random.Range(0, tiles.Length - 1)], pathfinding.GetGrid().GetWorldPosition(x, y), Quaternion.identity);
             }
         }
+    }
+
+    public Vector3 GetEndPosition()
+    {
+        return endPosition;
     }
 }

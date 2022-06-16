@@ -32,18 +32,34 @@ public class Enemy : MonoBehaviour
 
             // Look at
             Vector3 direction = path[currentNode] - transform.position;
-            float angle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            direction.z = 0;
+            transform.rotation = Quaternion.FromToRotation(Vector3.up, direction);
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if(health > 0)
+        {
+            health--;
+            if (health <= 0)
+            {
+                Kill();
+            }
         }
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log("COllision");
         if (col.gameObject.tag == "Finish")
         {
-            Manager.Instance.mobDied(this);
-            Destroy(gameObject);
+            Kill();
         }
+    }
+
+    void Kill()
+    {
+        Manager.Instance.mobDied(this);
+        Destroy(gameObject);
     }
 }

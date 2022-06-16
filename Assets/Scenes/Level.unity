@@ -179,9 +179,11 @@ MonoBehaviour:
   mobsSpawned: 0
   mobsDied: 0
   buildTimer: 5
+  building: 0
   round: 0
   data: 50
   endPrefab: {fileID: 1297044329942528415, guid: 1513623d43f7c4b3a87cdbc841fad4ed, type: 3}
+  bitBlaster: {fileID: 4866332132388608593, guid: fb7ae75322f124c5fb824f059790b8d6, type: 3}
   tiles:
   - {fileID: 968372377274220998, guid: fa72b067422a34f348de240ba45df423, type: 3}
 --- !u!1 &519420028
