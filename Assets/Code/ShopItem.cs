@@ -8,15 +8,21 @@ public class ShopItem : MonoBehaviour
     public GameObject prefab;
 
     private Manager manager;
+    private Button button;
+    private int data;
     // Start is called before the first frame update
     void Start()
     {
         manager = Manager.Instance;
+        button = this.GetComponent<Button>();
+        data = prefab.GetComponent<Placeable>().data;
 
         this.GetComponent<Image>().sprite = prefab.GetComponent<SpriteRenderer>().sprite;
         this.GetComponent<Image>().color = prefab.GetComponent<SpriteRenderer>().color;
 
-        this.GetComponent<Button>().onClick.AddListener(delegate () { Clicked(); });
+        button.onClick.AddListener(delegate () { Clicked(); });
+
+        gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = data.ToString();
     }
 
     private void Update()
@@ -25,6 +31,9 @@ public class ShopItem : MonoBehaviour
         {
             manager = Manager.Instance;
         }
+
+        button.interactable = manager.data >= data;
+
     }
 
     void Clicked()

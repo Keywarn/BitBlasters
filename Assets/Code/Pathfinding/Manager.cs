@@ -76,18 +76,7 @@ public class Manager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && currentPlaceable != null)
         {
-            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            if(pathfinding.GetGrid().GetXY(worldPosition, out int x, out int y))
-            {
-                PathNode node = pathfinding.GetGrid().GetNode(x, y);
-
-                if (node.placeable == null)
-                {
-                    GameObject placed = GameObject.Instantiate(currentPlaceable, pathfinding.GetGrid().GetWorldPosition(x, y), Quaternion.identity);
-                    node.placeable = placed.GetComponent<Placeable>();
-                    pathfindingDirty = true;
-                }
-            }
+            Place();
         }
 
         if (building)
@@ -95,7 +84,12 @@ public class Manager : MonoBehaviour
             currentBuildTimer += Time.deltaTime;
             if (currentBuildTimer >= buildTimer)
             {
-                //TODO remove placeable if it is not an active
+                // Remove the current placeable object if it is not an active
+                if (currentPlaceable != null && !currentPlaceable.GetComponent<Placeable>().isActive)
+                {
+                    currentPlaceable = null;
+                }
+
                 currentBuildTimer = 0;
                 building = false;
                 
@@ -177,5 +171,29 @@ public class Manager : MonoBehaviour
         }
 
         currentPlaceable = prefab;
+    }
+
+    private void Place()
+    {
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (pathfinding.GetGrid().GetXY(worldPosition, out int x, out int y))
+        {
+            PathNode node = pathfinding.GetGrid().GetNode(x, y);
+
+            int cost = currentPlaceable.GetComponent<Placeable>().data;
+            if(cost > data)
+            {
+                currentPlaceable = null;
+                return;
+            }
+
+            if (node.placeable == null )
+            {
+                GameObject placed = GameObject.Instantiate(currentPlaceable, pathfinding.GetGrid().GetWorldPosition(x, y), Quaternion.identity);
+                node.placeable = placed.GetComponent<Placeable>();
+                pathfindingDirty = true;
+                data -= cost;
+            }
+        }
     }
 }
