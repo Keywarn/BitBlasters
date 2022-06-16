@@ -74,9 +74,18 @@ public class Manager : MonoBehaviour
             Debug.DrawLine(path[i], path[i + 1], Color.green);
         }
 
-        if (Input.GetMouseButtonDown(0) && currentPlaceable != null)
+        if (currentPlaceable != null)
         {
-            Place();
+            int cost = currentPlaceable.GetComponent<Placeable>().data;
+            if (cost > data)
+            {
+                currentPlaceable = null;
+
+            }
+            else if(Input.GetMouseButtonDown(0))
+            {
+                Place();
+            }
         }
 
         if (building)
