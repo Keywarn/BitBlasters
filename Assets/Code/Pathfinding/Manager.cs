@@ -32,6 +32,7 @@ public class Manager : MonoBehaviour
     private GameObject currentPlaceable;
     private GameObject previewPlaceable;
     private int oldPreviewX, oldPreviewY;
+    private bool canPlace;
 
     // Currency
     public int data = 50;
@@ -120,23 +121,30 @@ public class Manager : MonoBehaviour
         }
     }
 
-    private bool DoPathing()
+    private bool GetPath(out List<Vector3> tempPath)
     {
-        List<Vector3> tempPath = pathfinding.FindPath(startPosition, endPosition);
+        tempPath = pathfinding.FindPath(startPosition, endPosition);
 
-        if(tempPath == null){
+        if (tempPath == null)
+        {
             return false;
         }
 
-        if(path != null)
-        {
-            ColorTiles(path, tileColor);
-        }
-        ColorTiles(tempPath, pathColor);
-
-        path = tempPath;
-        pathfindingDirty = false;
         return true;
+    }
+
+    private void DoPathing()
+    {
+        if (GetPath(out List<Vector3> tempPath)) {
+            if (path != null)
+            {
+                ColorTiles(path, tileColor);
+            }
+            ColorTiles(tempPath, pathColor);
+
+            path = tempPath;
+            pathfindingDirty = false;
+        }
     }
 
     private void ColorTiles (List<Vector3> path, Color color)
@@ -226,6 +234,7 @@ public class Manager : MonoBehaviour
         {
             PathNode node = pathfinding.GetGrid().GetNode(x, y);
 
+            // Double check the cost here
             int cost = currentPlaceable.GetComponent<Placeable>().data;
             if(cost > data)
             {
@@ -233,7 +242,7 @@ public class Manager : MonoBehaviour
                 return;
             }
 
-            if (node.placeable == null )
+            if (canPlace)
             {
                 GameObject placed = GameObject.Instantiate(currentPlaceable, pathfinding.GetGrid().GetWorldPosition(x, y), Quaternion.identity);
                 node.placeable = placed.GetComponent<Placeable>();
@@ -261,13 +270,26 @@ public class Manager : MonoBehaviour
                     previewPlaceable.transform.position = pathfinding.GetGrid().GetWorldPosition(x, y);
                 }
 
-                if (node.placeable != null)
+                // Check there isn't already an object at this node
+                canPlace = node.placeable == null;
+
+                // Check we aren't preventing pathing
+                if (canPlace)
                 {
-                    previewPlaceable.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0f, 0.5f);
+                    node.placeable = previewPlaceable.GetComponent<Placeable>();
+                    canPlace = (GetPath(out List<Vector3> tempPath));
+                    node.placeable = null;
+
+                }
+
+                // Set the colour
+                if (canPlace)
+                {
+                    previewPlaceable.GetComponent<SpriteRenderer>().color = new Color(1f, 1, 1f, 0.5f);
                 }
                 else
                 {
-                    previewPlaceable.GetComponent<SpriteRenderer>().color = new Color(1f, 1, 1f, 0.5f);
+                    previewPlaceable.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0f, 0.5f);
                 }
 
                 oldPreviewX = x;

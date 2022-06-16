@@ -48,8 +48,13 @@ public class Pathfinding
         PathNode startNode = grid.GetNode(startX, startY);
         PathNode endNode = grid.GetNode(endX, endY);
 
-        openList = new List<PathNode> { startNode };
+        openList = new List<PathNode>();
         closedList = new List<PathNode>();
+
+        if (startNode.IsWalkable())
+        {
+            openList.Add(startNode);
+        }
 
         for (int x = 0; x < grid.GetWidth(); x++)
         {
