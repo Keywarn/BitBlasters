@@ -29,6 +29,8 @@ public class Manager : MonoBehaviour
     public bool building;
     public int round = 0;
 
+    private GameObject currentPlaceable;
+
     // Currency
     public int data = 50;
 
@@ -72,14 +74,20 @@ public class Manager : MonoBehaviour
             Debug.DrawLine(path[i], path[i + 1], Color.green);
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && currentPlaceable != null)
         {
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            pathfinding.GetGrid().GetXY(worldPosition, out int x, out int y);
+            if(pathfinding.GetGrid().GetXY(worldPosition, out int x, out int y))
+            {
+                PathNode node = pathfinding.GetGrid().GetNode(x, y);
 
-            GameObject tower = GameObject.Instantiate(bitBlaster, pathfinding.GetGrid().GetWorldPosition(x,y), Quaternion.identity);
-            pathfinding.GetGrid().GetNode(worldPosition).placeable = tower.GetComponent<Placeable>();
-            pathfindingDirty = true;
+                if (node.placeable == null)
+                {
+                    GameObject placed = GameObject.Instantiate(currentPlaceable, pathfinding.GetGrid().GetWorldPosition(x, y), Quaternion.identity);
+                    node.placeable = placed.GetComponent<Placeable>();
+                    pathfindingDirty = true;
+                }
+            }
         }
 
         if (building)
@@ -87,6 +95,7 @@ public class Manager : MonoBehaviour
             currentBuildTimer += Time.deltaTime;
             if (currentBuildTimer >= buildTimer)
             {
+                //TODO remove placeable if it is not an active
                 currentBuildTimer = 0;
                 building = false;
                 
@@ -155,5 +164,18 @@ public class Manager : MonoBehaviour
     public Vector3 GetEndPosition()
     {
         return endPosition;
+    }
+
+    public void BeginPlacement(GameObject prefab)
+    {
+        Placeable placeable = prefab.GetComponent<Placeable>();
+
+        // Trying to place a building not in the build phase
+        if(!placeable.isActive && !building)
+        {
+            return;
+        }
+
+        currentPlaceable = prefab;
     }
 }

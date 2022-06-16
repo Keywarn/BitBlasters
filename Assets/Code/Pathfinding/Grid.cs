@@ -65,10 +65,13 @@ public class Grid
 
     }
 
-    public void GetXY(Vector3 worldPosition, out int x, out int y)
+    public bool GetXY(Vector3 worldPosition, out int x, out int y)
     {
         x = Mathf.FloorToInt((worldPosition - originPosition).x / cellSize);
         y = Mathf.FloorToInt((worldPosition - originPosition).y / cellSize);
+
+        return (x >= 0 && x < width && y >= 0 && y < height);
+
     }
 
     public void SetValue (int x, int y, PathNode value)
