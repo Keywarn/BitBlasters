@@ -12,7 +12,8 @@ public class Manager : MonoBehaviour
     //Pathing
     private Pathfinding pathfinding;
     private Vector3 startPosition, endPosition;
-    List<Vector3> path;
+    private List<Vector3> path;
+    private List<Vector3> previewPath;
     private bool pathfindingDirty;
 
     // Mob management
@@ -41,6 +42,7 @@ public class Manager : MonoBehaviour
     public GameObject bitBlaster;
     public Color tileColor;
     public Color pathColor;
+    public Color previewPathColor;
     public GameObject[] tiles;
     private GameObject[,] tileObjects;
 
@@ -277,9 +279,19 @@ public class Manager : MonoBehaviour
                 if (canPlace)
                 {
                     node.placeable = previewPlaceable.GetComponent<Placeable>();
-                    canPlace = (GetPath(out List<Vector3> tempPath));
-                    node.placeable = null;
 
+                    RemovePreviewPath();
+
+                    if (GetPath(out List<Vector3> tempPath))
+                    {
+                        if(!SamePath(tempPath, path)) ColorTiles(tempPath, previewPathColor);
+                        previewPath = tempPath;
+                    }
+                    else
+                    {
+                        canPlace = false;
+                    }
+                    node.placeable = null;
                 }
 
                 // Set the colour
@@ -298,12 +310,40 @@ public class Manager : MonoBehaviour
         }
     }
 
+    private bool SamePath(List<Vector3> a, List<Vector3> b)
+    {
+        if (a.Count != b.Count) return false;
+        else
+        {
+            for (int i = 0; i < a.Count; i++)
+            {
+                if(Vector3.Distance(a[i], b[i]) > 0.1f)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     private void RemovePreview()
     {
         if (previewPlaceable != null)
         {
             Destroy(previewPlaceable);
             previewPlaceable = null;
+        }
+
+        RemovePreviewPath();
+    }
+
+    private void RemovePreviewPath()
+    {
+        if(previewPath != null && !SamePath(previewPath, path))
+        {
+            ColorTiles(previewPath, tileColor);
+            previewPath = null;
+            ColorTiles(path, pathColor);
         }
     }
 
