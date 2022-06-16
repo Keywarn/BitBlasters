@@ -26,7 +26,7 @@ public class Manager : MonoBehaviour
     // Flow management
     public float buildTimer = 5f;
     private float currentBuildTimer = 0f;
-    private bool building;
+    public bool building;
     public int round = 0;
 
     // Currency
@@ -74,7 +74,7 @@ public class Manager : MonoBehaviour
         if (Input.GetMouseButton(1))
         {
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            pathfinding.GetGrid().GetNode(worldPosition).isWalkable = false;
+            pathfinding.GetGrid().GetNode(worldPosition).placeable = new Placeable();
             pathfindingDirty = true;
         }
 

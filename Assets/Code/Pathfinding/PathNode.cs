@@ -12,16 +12,15 @@ public class PathNode
     public int gCost;
     public int hCost;
     public int fCost;
-    public bool isWalkable;
 
     public PathNode parent;
+    public Placeable placeable;
 
     public PathNode(Grid grid, int x, int y)
     {
         this.grid = grid;
         this.x = x;
         this.y = y;
-        isWalkable = true;
     }
 
     public void CalculateFCost()
@@ -32,5 +31,16 @@ public class PathNode
     public override string ToString()
     {
         return ("[" + x + "," + y + "]");
+    }
+
+    public bool IsWalkable()
+    {
+        if(placeable != null)
+        {
+
+            return placeable.isActive;
+        }
+
+        return true;
     }
 }

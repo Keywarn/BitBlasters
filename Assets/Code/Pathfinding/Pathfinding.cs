@@ -80,7 +80,7 @@ public class Pathfinding
             foreach (PathNode neighbour in GetNeighbours(currentNode))
             {
                 if (closedList.Contains(neighbour)) continue;
-                if(!neighbour.isWalkable)
+                if(!neighbour.IsWalkable())
                 {
                     closedList.Add(neighbour);
                     continue;
@@ -112,12 +112,12 @@ public class Pathfinding
             // Left
             neighbours.Add(grid.GetNode(node.x - 1, node.y));
 
-            if (CAN_TRAVEL_DIAGONAL && grid.GetNode(node.x-1, node.y).isWalkable)
+            if (CAN_TRAVEL_DIAGONAL && grid.GetNode(node.x-1, node.y).IsWalkable())
             {
                 // Left Below
-                if (node.y - 1 >= 0 && grid.GetNode(node.x, node.y - 1).isWalkable) neighbours.Add(grid.GetNode(node.x - 1, node.y - 1));
+                if (node.y - 1 >= 0 && grid.GetNode(node.x, node.y - 1).IsWalkable()) neighbours.Add(grid.GetNode(node.x - 1, node.y - 1));
                 // Left Above
-                if (node.y + 1 < grid.GetHeight() && grid.GetNode(node.x, node.y + 1).isWalkable) neighbours.Add(grid.GetNode(node.x - 1, node.y + 1));
+                if (node.y + 1 < grid.GetHeight() && grid.GetNode(node.x, node.y + 1).IsWalkable()) neighbours.Add(grid.GetNode(node.x - 1, node.y + 1));
             }
         }
 
@@ -126,12 +126,12 @@ public class Pathfinding
             // Right
             neighbours.Add(grid.GetNode(node.x + 1, node.y));
 
-            if (CAN_TRAVEL_DIAGONAL && grid.GetNode(node.x + 1, node.y).isWalkable)
+            if (CAN_TRAVEL_DIAGONAL && grid.GetNode(node.x + 1, node.y).IsWalkable())
             {
                 // Right Below
-                if (node.y - 1 >= 0 && grid.GetNode(node.x , node.y - 1).isWalkable) neighbours.Add(grid.GetNode(node.x + 1, node.y - 1));
+                if (node.y - 1 >= 0 && grid.GetNode(node.x , node.y - 1).IsWalkable()) neighbours.Add(grid.GetNode(node.x + 1, node.y - 1));
                 // Right Above
-                if (node.y + 1 < grid.GetHeight() && grid.GetNode(node.x, node.y + 1).isWalkable) neighbours.Add(grid.GetNode(node.x + 1, node.y + 1));
+                if (node.y + 1 < grid.GetHeight() && grid.GetNode(node.x, node.y + 1).IsWalkable()) neighbours.Add(grid.GetNode(node.x + 1, node.y + 1));
             }
         }
 
