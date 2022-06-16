@@ -30,13 +30,18 @@ public class Manager : MonoBehaviour
     public int round = 0;
 
     private GameObject currentPlaceable;
+    private GameObject previewPlaceable;
+    private int oldPreviewX, oldPreviewY;
 
     // Currency
     public int data = 50;
 
     public GameObject endPrefab;
     public GameObject bitBlaster;
+    public Color tileColor;
+    public Color pathColor;
     public GameObject[] tiles;
+    private GameObject[,] tileObjects;
 
     // Start is called before the first frame update
     void Start()
@@ -65,13 +70,7 @@ public class Manager : MonoBehaviour
     {
         if(pathfindingDirty || path.Count == 0)
         {
-            path = pathfinding.FindPath(startPosition, endPosition);
-            pathfindingDirty = false;
-        }
-
-        for (int i = 0; i < path.Count - 1; i++)
-        {
-            Debug.DrawLine(path[i], path[i + 1], Color.green);
+            DoPathing();
         }
 
         if (currentPlaceable != null)
@@ -79,12 +78,18 @@ public class Manager : MonoBehaviour
             int cost = currentPlaceable.GetComponent<Placeable>().data;
             if (cost > data)
             {
-                currentPlaceable = null;
+                CancelPlace();
 
             }
-            else if(Input.GetMouseButtonDown(0))
+
+            // Has enough money
+            else
             {
-                Place();
+                PlacePreview();
+                if(Input.GetMouseButtonDown(0))
+                {
+                    Place();
+                }
             }
         }
 
@@ -96,7 +101,7 @@ public class Manager : MonoBehaviour
                 // Remove the current placeable object if it is not an active
                 if (currentPlaceable != null && !currentPlaceable.GetComponent<Placeable>().isActive)
                 {
-                    currentPlaceable = null;
+                    CancelPlace();
                 }
 
                 currentBuildTimer = 0;
@@ -112,6 +117,34 @@ public class Manager : MonoBehaviour
         {
             StartRound();
             building = true;
+        }
+    }
+
+    private bool DoPathing()
+    {
+        List<Vector3> tempPath = pathfinding.FindPath(startPosition, endPosition);
+
+        if(tempPath == null){
+            return false;
+        }
+
+        if(path != null)
+        {
+            ColorTiles(path, tileColor);
+        }
+        ColorTiles(tempPath, pathColor);
+
+        path = tempPath;
+        pathfindingDirty = false;
+        return true;
+    }
+
+    private void ColorTiles (List<Vector3> path, Color color)
+    {
+        foreach (Vector3 tile in path)
+        {
+            pathfinding.GetGrid().GetXY(tile, out int x, out int y);
+            tileObjects[x, y].GetComponent<SpriteRenderer>().color = color;
         }
     }
 
@@ -155,11 +188,13 @@ public class Manager : MonoBehaviour
 
     void SetupTiles()
     {
+        tileObjects = new GameObject[gridWidth, gridHeight];
         for (int x = 0; x < gridWidth; x++)
         {
             for(int y = 0; y < gridHeight; y++)
             {
-                Instantiate(tiles[Random.Range(0, tiles.Length - 1)], pathfinding.GetGrid().GetWorldPosition(x, y), Quaternion.identity);
+                GameObject tile = Instantiate(tiles[Random.Range(0, tiles.Length - 1)], pathfinding.GetGrid().GetWorldPosition(x, y), Quaternion.identity);
+                tileObjects[x, y] = tile;
             }
         }
     }
@@ -184,6 +219,8 @@ public class Manager : MonoBehaviour
 
     private void Place()
     {
+        RemovePreview();
+        previewPlaceable = null;
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         if (pathfinding.GetGrid().GetXY(worldPosition, out int x, out int y))
         {
@@ -192,7 +229,7 @@ public class Manager : MonoBehaviour
             int cost = currentPlaceable.GetComponent<Placeable>().data;
             if(cost > data)
             {
-                currentPlaceable = null;
+                CancelPlace();
                 return;
             }
 
@@ -204,5 +241,53 @@ public class Manager : MonoBehaviour
                 data -= cost;
             }
         }
+    }
+
+    private void PlacePreview()
+    {
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (pathfinding.GetGrid().GetXY(worldPosition, out int x, out int y))
+        {
+            if(oldPreviewX != x || oldPreviewY != y)
+            {
+                PathNode node = pathfinding.GetGrid().GetNode(x, y);
+
+                if(previewPlaceable == null)
+                {
+                    previewPlaceable = GameObject.Instantiate(currentPlaceable, pathfinding.GetGrid().GetWorldPosition(x, y), Quaternion.identity);
+                }
+                else
+                {
+                    previewPlaceable.transform.position = pathfinding.GetGrid().GetWorldPosition(x, y);
+                }
+
+                if (node.placeable != null)
+                {
+                    previewPlaceable.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0f, 0.5f);
+                }
+                else
+                {
+                    previewPlaceable.GetComponent<SpriteRenderer>().color = new Color(1f, 1, 1f, 0.5f);
+                }
+
+                oldPreviewX = x;
+                oldPreviewY = y;
+            }
+        }
+    }
+
+    private void RemovePreview()
+    {
+        if (previewPlaceable != null)
+        {
+            Destroy(previewPlaceable);
+            previewPlaceable = null;
+        }
+    }
+
+    private void CancelPlace()
+    {
+        RemovePreview();
+        currentPlaceable = null;
     }
 }

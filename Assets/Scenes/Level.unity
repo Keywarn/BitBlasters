@@ -184,6 +184,8 @@ MonoBehaviour:
   data: 50
   endPrefab: {fileID: 1297044329942528415, guid: 1513623d43f7c4b3a87cdbc841fad4ed, type: 3}
   bitBlaster: {fileID: 4866332132388608593, guid: fb7ae75322f124c5fb824f059790b8d6, type: 3}
+  tileColor: {r: 1, g: 1, b: 1, a: 1}
+  pathColor: {r: 0.735849, g: 0.083034925, b: 0, a: 1}
   tiles:
   - {fileID: 968372377274220998, guid: fa72b067422a34f348de240ba45df423, type: 3}
 --- !u!1 &519420028
@@ -256,7 +258,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.103773594, g: 0.103773594, b: 0.103773594, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

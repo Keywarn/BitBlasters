@@ -32,7 +32,7 @@ public class ShopItem : MonoBehaviour
             manager = Manager.Instance;
         }
 
-        button.interactable = manager.data >= data;
+        button.interactable = manager.data >= data && manager.building;
 
     }
 
