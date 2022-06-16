@@ -186,6 +186,7 @@ MonoBehaviour:
   bitBlaster: {fileID: 4866332132388608593, guid: fb7ae75322f124c5fb824f059790b8d6, type: 3}
   tileColor: {r: 1, g: 1, b: 1, a: 1}
   pathColor: {r: 0.735849, g: 0.083034925, b: 0, a: 1}
+  previewPathColor: {r: 0.754717, g: 0.754717, b: 0.754717, a: 1}
   tiles:
   - {fileID: 968372377274220998, guid: fa72b067422a34f348de240ba45df423, type: 3}
 --- !u!1 &519420028
