@@ -46,6 +46,10 @@ public class Manager : MonoBehaviour
     public GameObject[] tiles;
     private GameObject[,] tileObjects;
 
+    // UI
+    public TMPro.TextMeshProUGUI roundText;
+    public TMPro.TextMeshProUGUI dataText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -66,6 +70,9 @@ public class Manager : MonoBehaviour
 
         building = true;
         StartRound();
+
+        // Assign the starting data amount
+        ModifyData(0);
     }
 
     // Update is called once per frame
@@ -92,6 +99,10 @@ public class Manager : MonoBehaviour
                 if(Input.GetMouseButtonDown(0))
                 {
                     Place();
+                }
+                else if (Input.GetMouseButtonDown(1) || Input.GetButtonDown("Cancel"))
+                {
+                    CancelPlace();
                 }
             }
         }
@@ -179,11 +190,11 @@ public class Manager : MonoBehaviour
 
         if(mob.health > 0)
         {
-            data -= mob.data;
+            ModifyData(-mob.data);
         }
         else
         {
-            data += mob.data;
+           ModifyData(mob.data);
         }
     }
 
@@ -191,6 +202,7 @@ public class Manager : MonoBehaviour
         round++;
 
         // TODO Decide how many mobs
+        roundText.text = "Round: " + round;
         mobsInRound = 5;
         mobsSpawned = 0;
         mobsDied = 0;
@@ -249,7 +261,7 @@ public class Manager : MonoBehaviour
                 GameObject placed = GameObject.Instantiate(currentPlaceable, pathfinding.GetGrid().GetWorldPosition(x, y), Quaternion.identity);
                 node.placeable = placed.GetComponent<Placeable>();
                 pathfindingDirty = true;
-                data -= cost;
+                ModifyData(-cost);
             }
         }
     }
@@ -351,5 +363,11 @@ public class Manager : MonoBehaviour
     {
         RemovePreview();
         currentPlaceable = null;
+    }
+
+    private void ModifyData(int amount)
+    {
+        data += amount;
+        dataText.text = data.ToString();
     }
 }
