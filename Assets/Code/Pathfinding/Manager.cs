@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Manager : MonoBehaviour
 {
@@ -49,6 +50,7 @@ public class Manager : MonoBehaviour
     // UI
     public TMPro.TextMeshProUGUI roundText;
     public TMPro.TextMeshProUGUI dataText;
+    public Image RoundTimerFill;
 
     // Start is called before the first frame update
     void Start()
@@ -110,6 +112,8 @@ public class Manager : MonoBehaviour
         if (building)
         {
             currentBuildTimer += Time.deltaTime;
+            RoundTimerFill.fillAmount = Mathf.Max(buildTimer-currentBuildTimer, 0f) / buildTimer;
+            Debug.Log(Mathf.Max(buildTimer - currentBuildTimer, 0f) / buildTimer);
             if (currentBuildTimer >= buildTimer)
             {
                 // Remove the current placeable object if it is not an active
