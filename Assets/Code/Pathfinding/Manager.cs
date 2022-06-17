@@ -21,9 +21,14 @@ public class Manager : MonoBehaviour
     public float mobTimer = 3f;
     public GameObject mob;
     private float currentMobTimer = 0f;
-    public float mobsInRound;
-    public float mobsSpawned;
-    public float mobsDied;
+
+    // How oftten the round difficulty goes up
+    public int difficultyFactor = 5;
+    private int difficulty = 1;
+
+    private int mobsInRound;
+    private int mobsSpawned;
+    private int mobsDied;
 
     // Flow management
     public float buildTimer = 5f;
@@ -204,13 +209,25 @@ public class Manager : MonoBehaviour
 
     void StartRound() {
         round++;
-
-        // TODO Decide how many mobs
         roundText.text = "Round: " + round;
-        mobsInRound += 5;
+
+        mobsInRound = GetMobsCount();
+
         mobTimer *= 0.95f;
         mobsSpawned = 0;
         mobsDied = 0;
+    }
+
+    private int GetMobsCount()
+    {
+        if(round/difficultyFactor == 1)
+        {
+            difficultyFactor *= 5;
+            difficulty++;
+        }
+
+        return (int)(0.15f * round) * (24 + 6 * (difficulty - 1));
+        
     }
 
     void SetupTiles()
