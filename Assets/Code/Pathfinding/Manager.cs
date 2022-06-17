@@ -207,7 +207,8 @@ public class Manager : MonoBehaviour
 
         // TODO Decide how many mobs
         roundText.text = "Round: " + round;
-        mobsInRound = 5;
+        mobsInRound += 5;
+        mobTimer *= 0.95f;
         mobsSpawned = 0;
         mobsDied = 0;
     }
@@ -377,6 +378,6 @@ public class Manager : MonoBehaviour
 
     public void SkipBuilding()
     {
-        currentBuildTimer = buildTimer;
+        if (building) currentBuildTimer = buildTimer;
     }
 }
