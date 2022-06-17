@@ -113,7 +113,7 @@ public class Manager : MonoBehaviour
         {
             currentBuildTimer += Time.deltaTime;
             RoundTimerFill.fillAmount = Mathf.Max(buildTimer-currentBuildTimer, 0f) / buildTimer;
-            Debug.Log(Mathf.Max(buildTimer - currentBuildTimer, 0f) / buildTimer);
+
             if (currentBuildTimer >= buildTimer)
             {
                 // Remove the current placeable object if it is not an active
@@ -373,5 +373,10 @@ public class Manager : MonoBehaviour
     {
         data += amount;
         dataText.text = data.ToString();
+    }
+
+    public void SkipBuilding()
+    {
+        currentBuildTimer = buildTimer;
     }
 }
