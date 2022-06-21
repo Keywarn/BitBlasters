@@ -4,9 +4,18 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public float moveSpeed;
-    public int data;
-    public int health;
+    public int health = 1;
+    public float moveSpeed = 1;
+    public int data = 5;
+    public int populationCost = 1;
+    public int minimumRound = 0;
+    public float maxGap = 1f;
+    public float minGap = 0.1f;
+    
+    public float startProbability = 0f;
+    public float roundProbabiltyMultiplier = 1.1f;
+    public float roundGapModifier = 0.05f;
+
 
     private int currentNode = 0;
 

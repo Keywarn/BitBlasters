@@ -19,12 +19,12 @@ public class Manager : MonoBehaviour
 
     // Mob management
     public float mobTimer = 3f;
-    public GameObject mob;
+    public GameObject[] mobs;
+    private GameObject nextMob;
     private float currentMobTimer = 0f;
+    private float difficulty = 1;
 
-    // How oftten the round difficulty goes up
-    public int difficultyFactor = 5;
-    private int difficulty = 1;
+    private List<GameObject> possibleMobs;
 
     private int mobsInRound;
     private int mobsSpawned;
@@ -139,7 +139,6 @@ public class Manager : MonoBehaviour
         else if(mobsDied >= mobsInRound)
         {
             StartRound();
-            building = true;
         }
     }
 
@@ -184,18 +183,19 @@ public class Manager : MonoBehaviour
 
         if(currentMobTimer >= mobTimer)
         {
-            GameObject newMob = Instantiate(mob, startPosition, Quaternion.identity);
+            GameObject newMob = Instantiate(nextMob, startPosition, Quaternion.identity);
 
             newMob.GetComponent<Enemy>().path = path;
 
             currentMobTimer = 0;
-            mobsSpawned++;
+            mobsSpawned += nextMob.GetComponent<Enemy>().populationCost;
+            GetNextMob();
         }
     }
 
     public void mobDied(Enemy mob)
     {
-        mobsDied++;
+        mobsDied += mob.populationCost;
 
         if(mob.health > 0)
         {
@@ -212,22 +212,55 @@ public class Manager : MonoBehaviour
         roundText.text = "Round: " + round;
 
         mobsInRound = GetMobsCount();
+        CalcPossibleMobs();
+        GetNextMob();
 
-        mobTimer *= 0.95f;
         mobsSpawned = 0;
         mobsDied = 0;
+
+        building = true;
     }
 
     private int GetMobsCount()
     {
-        if(round/difficultyFactor == 1)
+        difficulty *= 1.1f;
+
+        return Mathf.FloorToInt(round * 3 + difficulty * 3);
+    }
+
+    private void CalcPossibleMobs()
+    {
+        possibleMobs = new List<GameObject>();
+
+        foreach (GameObject mob in mobs)
         {
-            difficultyFactor *= 5;
-            difficulty++;
+            if (round >= mob.GetComponent<Enemy>().minimumRound)
+            {
+                possibleMobs.Add(mob);
+            }
         }
 
-        return (int)(0.15f * round) * (24 + 6 * (difficulty - 1));
-        
+        possibleMobs.Reverse();
+    }
+
+    private void GetNextMob()
+    {
+        // Go through each mob from toughest to weakest
+        foreach (GameObject mob in possibleMobs)
+        {
+            Enemy enemy = mob.GetComponent<Enemy>();
+
+            int roundDiff = round - enemy.minimumRound;
+
+            float probability = enemy.startProbability * Mathf.Pow(enemy.roundProbabiltyMultiplier, roundDiff);
+
+            if(Random.Range(0f, 1f) <= probability)
+            {
+                nextMob = mob;
+                mobTimer = Mathf.Max(enemy.minGap, enemy.maxGap - enemy.roundGapModifier * roundDiff);
+                break;
+            }
+        }
     }
 
     void SetupTiles()
