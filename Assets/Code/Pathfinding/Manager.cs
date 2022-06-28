@@ -46,7 +46,7 @@ public class Manager : MonoBehaviour
 
     public GameObject endPrefab;
     public GameObject startPrefab;
-    public GameObject bitBlaster;
+    public GameObject spawnParticle;
     public Color tileColor;
     public Color pathColor;
     public Color previewPathColor;
@@ -185,6 +185,7 @@ public class Manager : MonoBehaviour
 
         if(currentMobTimer >= mobTimer)
         {
+            Instantiate(spawnParticle, startPosition, Quaternion.identity);
             GameObject newMob = Instantiate(nextMob, startPosition, Quaternion.identity);
 
             newMob.GetComponent<Enemy>().path = path;
