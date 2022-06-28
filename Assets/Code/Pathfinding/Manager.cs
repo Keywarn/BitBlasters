@@ -45,6 +45,7 @@ public class Manager : MonoBehaviour
     public int data = 50;
 
     public GameObject endPrefab;
+    public GameObject startPrefab;
     public GameObject bitBlaster;
     public Color tileColor;
     public Color pathColor;
@@ -72,6 +73,7 @@ public class Manager : MonoBehaviour
         SetupTiles();
 
         Instantiate(endPrefab, endPosition, Quaternion.identity);
+        Instantiate(startPrefab, startPosition, Quaternion.identity);
 
         pathfindingDirty = true;
 
