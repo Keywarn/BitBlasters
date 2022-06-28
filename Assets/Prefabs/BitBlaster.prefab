@@ -103,3 +103,5 @@ MonoBehaviour:
   fireCooldown: 1
   range: 3.5
   damage: 0
+  laserPrefab: {fileID: 4196414433157088917, guid: b3de5f0f0ab384bcb98a8bf9f127e8b0, type: 3}
+  laserHitPrefab: {fileID: 4196414433157088917, guid: 9288327a852774d2fbcdd8d0819f396c, type: 3}

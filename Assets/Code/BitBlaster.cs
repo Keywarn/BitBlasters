@@ -9,6 +9,9 @@ public class BitBlaster : Placeable
     public int damage;
     private float currentFireTime;
 
+    public GameObject laserPrefab;
+    public GameObject laserHitPrefab;
+
     private Manager manager;
     // Start is called before the first frame update
     void Start()
@@ -30,7 +33,7 @@ public class BitBlaster : Placeable
 
                 if(target != null)
                 {
-                    //LookAt(target);
+                    FireLaser(target);
                     target.GetComponent<Enemy>().TakeDamage(damage);
                     currentFireTime = fireCooldown;
                 }
@@ -66,10 +69,11 @@ public class BitBlaster : Placeable
         return closest;
     }
 
-    private void LookAt(GameObject target)
+    private void FireLaser(GameObject target)
     {
         Vector3 direction = target.transform.position - transform.position;
-        direction.z = 0;
-        transform.rotation = Quaternion.FromToRotation(Vector3.up,direction);
+        GameObject laser = Instantiate(laserPrefab, transform.position, Quaternion.FromToRotation(Vector3.up, direction));
+        laser.transform.localScale = new Vector3(laser.transform.localScale.x,direction.magnitude,0);
+        Instantiate(laserHitPrefab, target.transform.position, Quaternion.identity);
     }
 }
