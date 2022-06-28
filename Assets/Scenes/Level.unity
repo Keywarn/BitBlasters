@@ -177,6 +177,8 @@ MonoBehaviour:
   mobs:
   - {fileID: 2627933417702508311, guid: 6a28ac1b5e9714e5baa8d73a9185888f, type: 3}
   - {fileID: 2627933417702508311, guid: bfc159037a4254d4fb04891d2df26e7d, type: 3}
+  - {fileID: 2627933417702508311, guid: 602b04c113347430a9ff6688bbd33fa3, type: 3}
+  - {fileID: 2627933417702508311, guid: 28b06cbb55d3f4009a2ee1d1a2031932, type: 3}
   buildTimer: 5
   building: 0
   round: 0
