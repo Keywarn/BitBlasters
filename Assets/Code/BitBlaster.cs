@@ -30,7 +30,7 @@ public class BitBlaster : Placeable
 
                 if(target != null)
                 {
-                    LookAt(target);
+                    //LookAt(target);
                     target.GetComponent<Enemy>().TakeDamage(damage);
                     currentFireTime = fireCooldown;
                 }
