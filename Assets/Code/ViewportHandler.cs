@@ -31,6 +31,7 @@ using UnityEngine;
 public class ViewportHandler : MonoBehaviour
 {
     #region FIELDS
+    public GameObject background;
     public Color wireColor = Color.white;
     public float UnitsSize = 1; // size of your scene in unity units
     public Constraint constraint = Constraint.Portrait;
@@ -180,6 +181,8 @@ public class ViewportHandler : MonoBehaviour
         _tl = new Vector3(leftX, topY, 0);
         _tc = new Vector3(cameraX, topY, 0);
         _tr = new Vector3(rightX, topY, 0);
+
+        background.transform.localScale = Vector3.one * camera.orthographicSize / 5f;
     }
 
     private void Update()
