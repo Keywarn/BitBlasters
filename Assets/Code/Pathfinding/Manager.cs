@@ -47,10 +47,12 @@ public class Manager : MonoBehaviour
     public GameObject endPrefab;
     public GameObject startPrefab;
     public GameObject spawnParticle;
+    public GameObject EmptyPlaceable;
     public Color tileColor;
     public Color pathColor;
     public Color previewPathColor;
     public GameObject[] tiles;
+    public Vector2Int[] blockedCells;
     private GameObject[,] tileObjects;
 
     // UI
@@ -70,10 +72,18 @@ public class Manager : MonoBehaviour
         startPosition = pathfinding.GetGrid().GetWorldPosition(startX, startY);
         endPosition = pathfinding.GetGrid().GetWorldPosition(endX, endY);
 
+        Placeable empty = EmptyPlaceable.GetComponent<Placeable>();
+        foreach (Vector2Int pos in blockedCells)
+        {
+            pathfinding.GetGrid().GetNode(startX + pos.x, startY + pos.y).placeable = empty;
+        }
+
         SetupTiles();
 
         Instantiate(endPrefab, endPosition, Quaternion.identity);
         Instantiate(startPrefab, startPosition, Quaternion.identity);
+
+        
 
         pathfindingDirty = true;
 
