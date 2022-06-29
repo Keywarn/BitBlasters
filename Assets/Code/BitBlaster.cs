@@ -11,12 +11,15 @@ public class BitBlaster : Placeable
 
     public GameObject laserPrefab;
     public GameObject laserHitPrefab;
+    private GameObject rangeVisual;
 
     private Manager manager;
     // Start is called before the first frame update
     void Start()
     {
         manager = Manager.Instance;
+        rangeVisual = transform.GetChild(0).gameObject;
+        rangeVisual.transform.localScale = Vector3.one * range * 2f;
     }
 
     // Update is called once per frame
@@ -75,5 +78,15 @@ public class BitBlaster : Placeable
         GameObject laser = Instantiate(laserPrefab, transform.position, Quaternion.FromToRotation(Vector3.up, direction));
         laser.transform.localScale = new Vector3(laser.transform.localScale.x,direction.magnitude,0);
         Instantiate(laserHitPrefab, target.transform.position, Quaternion.identity);
+    }
+
+    void OnMouseOver()
+    {
+        rangeVisual.SetActive(true);
+    }
+
+    void OnMouseExit()
+    {
+        rangeVisual.SetActive(false);
     }
 }

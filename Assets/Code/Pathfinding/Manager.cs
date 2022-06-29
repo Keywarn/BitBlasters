@@ -321,7 +321,6 @@ public class Manager : MonoBehaviour
 
                 if(node.placeable != null)
                 {
-                    Debug.Log("REPLACED HERE");
                     ModifyData(node.placeable.refundData);
                     Destroy(node.placeable.gameObject);
                 }
