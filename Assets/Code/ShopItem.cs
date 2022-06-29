@@ -10,12 +10,14 @@ public class ShopItem : MonoBehaviour
     private Manager manager;
     private Button button;
     private int data;
+    private bool isActive;
     // Start is called before the first frame update
     void Start()
     {
         manager = Manager.Instance;
         button = this.GetComponent<Button>();
         data = prefab.GetComponent<Placeable>().data;
+        isActive = prefab.GetComponent<Placeable>().isActive;
 
         this.GetComponent<Image>().sprite = prefab.GetComponent<SpriteRenderer>().sprite;
         this.GetComponent<Image>().color = prefab.GetComponent<SpriteRenderer>().color;
@@ -32,7 +34,7 @@ public class ShopItem : MonoBehaviour
             manager = Manager.Instance;
         }
 
-        button.interactable = manager.data >= data && manager.building;
+        button.interactable = manager.data >= data && (isActive || manager.building);
 
     }
 

@@ -317,6 +317,7 @@ public class Manager : MonoBehaviour
             if (canPlace)
             {
                 GameObject placed = GameObject.Instantiate(currentPlaceable, pathfinding.GetGrid().GetWorldPosition(x, y), Quaternion.identity);
+                placed.GetComponent<Placeable>().SetEnabled();
                 node.placeable = placed.GetComponent<Placeable>();
                 pathfindingDirty = true;
                 ModifyData(-cost);

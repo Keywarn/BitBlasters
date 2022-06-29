@@ -7,6 +7,7 @@ public class Placeable : MonoBehaviour
     public int data = 0;
     public bool isActive = false;
     public string enemyTag = "Enemy";
+    protected bool isEnabled = false;
 
     // Start is called before the first frame update
     void Start()
@@ -18,5 +19,10 @@ public class Placeable : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void SetEnabled()
+    {
+        isEnabled = true;
     }
 }
