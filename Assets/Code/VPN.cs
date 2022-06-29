@@ -43,9 +43,13 @@ public class VPN : Placeable
                 {
                     shrinking = true;
                     currentScaleTime = 0;
-                    // Get all mobs
 
+                    Collider2D[] cols = Physics2D.OverlapCircleAll(gameObject.transform.position, finalScale * 0.5f);
 
+                    foreach(Collider2D col in cols)
+                    {
+                        col.GetComponent<Enemy>().TakeDamage(damage);
+                    }
                     // For each mob apply damage
                 }
             }
