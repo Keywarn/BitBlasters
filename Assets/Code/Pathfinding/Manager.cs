@@ -318,6 +318,14 @@ public class Manager : MonoBehaviour
             {
                 GameObject placed = GameObject.Instantiate(currentPlaceable, pathfinding.GetGrid().GetWorldPosition(x, y), Quaternion.identity);
                 placed.GetComponent<Placeable>().SetEnabled();
+
+                if(node.placeable != null)
+                {
+                    Debug.Log("REPLACED HERE");
+                    ModifyData(node.placeable.refundData);
+                    Destroy(node.placeable.gameObject);
+                }
+
                 node.placeable = placed.GetComponent<Placeable>();
                 pathfindingDirty = true;
                 ModifyData(-cost);
@@ -346,9 +354,16 @@ public class Manager : MonoBehaviour
                 // Check there isn't already an object at this node
                 canPlace = node.placeable == null;
 
+                // Can place if placed is replaceable
+                if (!canPlace)
+                {
+                    canPlace = node.placeable.canBeReplaced && previewPlaceable.GetComponent<Placeable>().canReplace;
+                }
+
                 // Check we aren't preventing pathing
                 if (canPlace)
                 {
+                    Placeable cached = node.placeable;
                     node.placeable = previewPlaceable.GetComponent<Placeable>();
 
                     RemovePreviewPath();
@@ -362,7 +377,7 @@ public class Manager : MonoBehaviour
                     {
                         canPlace = false;
                     }
-                    node.placeable = null;
+                    node.placeable = cached;
                 }
 
                 // Set the colour
