@@ -56,9 +56,13 @@ public class Manager : MonoBehaviour
     private GameObject[,] tileObjects;
 
     // UI
+    public GameObject gameUI;
+    public GameObject menuUI;
     public TMPro.TextMeshProUGUI roundText;
     public TMPro.TextMeshProUGUI dataText;
     public Image RoundTimerFill;
+
+    private bool started = false;
 
     // Start is called before the first frame update
     void Start()
@@ -97,6 +101,11 @@ public class Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!started)
+        {
+            return;
+        }
+
         if(pathfindingDirty || path.Count == 0)
         {
             DoPathing();
@@ -457,5 +466,13 @@ public class Manager : MonoBehaviour
     public void SkipBuilding()
     {
         if (building) currentBuildTimer = buildTimer;
+    }
+
+    public void StartGame()
+    {
+        menuUI.SetActive(false);
+        gameUI.SetActive(true);
+
+        started = true;
     }
 }
