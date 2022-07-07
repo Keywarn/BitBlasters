@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Manager : MonoBehaviour
 {
@@ -58,6 +59,8 @@ public class Manager : MonoBehaviour
     // UI
     public GameObject gameUI;
     public GameObject menuUI;
+    public GameObject endUI;
+    public TMPro.TextMeshProUGUI endRoundText;
     public TMPro.TextMeshProUGUI roundText;
     public TMPro.TextMeshProUGUI dataText;
     public Image RoundTimerFill;
@@ -461,6 +464,15 @@ public class Manager : MonoBehaviour
     {
         data += amount;
         dataText.text = data.ToString();
+
+        if(data <= 0)
+        {
+            started = false;
+            endRoundText.text = "Final Round: " + round;
+            endUI.SetActive(true);
+            gameUI.SetActive(false);
+
+        }
     }
 
     public void SkipBuilding()
@@ -474,5 +486,10 @@ public class Manager : MonoBehaviour
         gameUI.SetActive(true);
 
         started = true;
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
