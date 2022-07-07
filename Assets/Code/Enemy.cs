@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
 
     private int currentNode = 0;
 
+    public GameObject brokenBug;
     public List<Vector3> path;
 
     // Start is called before the first frame update
@@ -69,6 +70,8 @@ public class Enemy : MonoBehaviour
     void Kill()
     {
         Manager.Instance.mobDied(this);
+        GameObject broken = Instantiate(brokenBug, transform.position, transform.rotation);
+        broken.transform.localScale = transform.localScale;
         Destroy(gameObject);
     }
 }

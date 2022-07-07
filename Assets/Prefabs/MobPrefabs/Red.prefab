@@ -141,6 +141,7 @@ MonoBehaviour:
   startProbability: 0.1
   roundProbabiltyMultiplier: 1.1
   roundGapModifier: 0.05
+  brokenBug: {fileID: 4196414433157088917, guid: 133dc3eb8310849efa04795f2eb7e559, type: 3}
   path: []
 --- !u!61 &1865185991153665973
 BoxCollider2D:
